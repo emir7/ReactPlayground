@@ -1,39 +1,63 @@
 import React, {useEffect} from "react";
-import {View, Text, StyleSheet, Button} from "react-native";
-import {CATEGORIES} from "../data/dummy-data";
+import {View, Text, StyleSheet, FlatList} from "react-native";
+
+import {CATEGORIES, MEALS} from "../data/dummy-data";
+import MealItem from "../components/MealItem";
 
 const CategoryMealScreen = (props) => {
-    const categotyId = props.navigation.getParam("categoryId");
+    console.log(props.route);
+    const categotyId = props.route.params.categoryId;
 
     const selectedCategory = CATEGORIES.find(cat => cat.id == categotyId);
-    
+    const displayedMeals = MEALS.filter(meal => meal.categoryIds.indexOf(categotyId) >= 0);
+
     useEffect(() => {
         props.navigation.setParams({"title": selectedCategory.title});
-    }, [])
+    }, []);
+
+
+    const selectMealHandler = (mealId) => {
+        console.log("mealId = "+mealId);
+        props.navigation.navigate("MealDetail", {
+            mealId
+        });
+        /*props.navigation.navigate({routeName: "MealDetail", params: {
+            mealId
+        }});*/
+    };
+
+    const renderMealItem = (itemData) => {
+        return (
+            <MealItem
+                title={itemData.item.title}
+                onSelectMeal={selectMealHandler.bind(this, itemData.item.id)}
+                duration={itemData.item.duration}
+                complexity={itemData.item.complexity.toUpperCase()}
+                affordability={itemData.item.affordability.toUpperCase()}
+                image={itemData.item.imageUrl}
+            />
+        );
+    };
 
     return (
         <View style={styles.screen}>
-            <Text>The Category Meal Screen!</Text>
-            <Text>{selectedCategory.title}</Text>
-            <Button title="Meal Details Screen" onPress={() => {
-                props.navigation.navigate({routeName: "MealDetail"})
-            }} />
-            <Button title="Go Back" onPress={() => {
-                 props.navigation.setParams({ title: 'Updated!' })
-            }}/>
+            <FlatList 
+                data={displayedMeals}  
+                keyExtractor={(item, _) => item.id}
+                renderItem={renderMealItem}
+                style={{width: "100%"}}
+            />
         </View>
     );
-};
-
-CategoryMealScreen.navigationOptions = (navigationData) => {
-    console.log(navigationData);
 };
 
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        paddingVertical: 15,
+        paddingHorizontal: 15
     }
 });
 
