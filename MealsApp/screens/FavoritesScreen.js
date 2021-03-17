@@ -1,20 +1,34 @@
-import React from "react";
-import {View, Text, StyleSheet} from "react-native";
+import React, {useLayoutEffect} from "react";
+
+import MealList from "../components/MealList";
+import { MEALS } from "../data/dummy-data";
+import NavHeaderButton from "../components/NavHeaderButton";
 
 const FavoritesScreen = (props) => {
+
+    const favMeals = MEALS.filter(meal => meal.id == "m1" || meal.id == "m2");
+    
+    const selectMealHandler = (mealId) => {
+        props.navigation.navigate("MealDetail", {
+            mealId
+        });
+    };
+
+    useLayoutEffect(() => {
+        props.navigation.setOptions({
+            headerLeft: () => (
+                <NavHeaderButton 
+                    navigation={props.navigation} />
+            )
+        });
+
+    }, [props?.navigation])
+
     return (
-        <View style={styles.screen}>
-            <Text>The Favorites Screen!</Text>
-        </View>
+        <MealList 
+            listData={favMeals}
+            selectMealHandler={selectMealHandler} />
     );
 };
-
-const styles = StyleSheet.create({
-    screen: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
-    }
-});
 
 export default FavoritesScreen;

@@ -14,7 +14,7 @@ const CategoryGridTile = (props) => {
             <TouchableCmp style={styles.gridItem} 
                 onPress={props.onPressHandler.bind(this, props.data.item.id)}>
                 <View style={{backgroundColor: props.data.item.color, ...styles.container}}>
-                    <Text  style={styles.title} >{props.data.item.title}</Text>
+                    <Text style={styles.title} >{props.data.item.title}</Text>
                 </View>
             </TouchableCmp>
         </View>
@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
         margin: 15,
         height: 150,
         borderRadius: 10,
+        elevation: 3,
         overflow: "hidden"
     },
     container: {
@@ -36,7 +37,6 @@ const styles = StyleSheet.create({
         shadowColor: "black",
         shadowOpacity: 0.6, // shadow works for iOS only.. elevation => android
         shadowOffset: {width: 0, height: 2},
-        elevation: 3,
         padding: 15, 
         justifyContent: "flex-end",
         alignItems: "flex-end"

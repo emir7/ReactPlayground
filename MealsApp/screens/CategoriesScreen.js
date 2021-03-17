@@ -1,25 +1,33 @@
-import React from "react";
-import {View, Text, FlatList, StyleSheet, Button, TouchableOpacity} from "react-native";
+import React, {useLayoutEffect} from "react";
+import {FlatList} from "react-native";
 
 import {CATEGORIES} from "../data/dummy-data";
 import CategoryGridTile from "../components/CategoryGridTile";
+import NavHeaderButton from "../components/NavHeaderButton";
 
 const CategoriesScreen = (props) => {
 
-    
     const onPressHandler = (catId) => {
        props.navigation.navigate("CategoryMeals", {
             categoryId: catId
         });
-    }
+    };
+
+    useLayoutEffect(() => {
+        props.navigation.setOptions({
+            headerLeft: () => (
+                <NavHeaderButton 
+                    navigation={props.navigation} />
+            )
+        });
+
+    }, [props?.navigation])
 
     const renderGridItem = (itemData) => {
         return (
             <CategoryGridTile data={itemData} onPressHandler={onPressHandler} />
         );
     };
-
-
 
     return (
         <FlatList 
@@ -30,14 +38,5 @@ const CategoriesScreen = (props) => {
     );
 };
 
-
-
-const styles = StyleSheet.create({
-    screen: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
-    }
-});
 
 export default CategoriesScreen;
