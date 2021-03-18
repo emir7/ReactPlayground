@@ -1,9 +1,10 @@
-import React, { useLayoutEffect } from "react";
-import { View, Text, StyleSheet, Button, Image } from "react-native";
-import { MEALS } from "../data/dummy-data";
+import React, { useCallback, useLayoutEffect } from "react";
+import { View, Text, StyleSheet, Image } from "react-native";
 import FavoritesHeaderButton from "../components/FavoritesHeaderButton";
 import { ScrollView } from "react-native-gesture-handler";
 import DefaultText from "../components/DefaultText";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleFavorite } from "../store/actions/meals";
 
 const ListItem = props => {
     return (
@@ -15,18 +16,25 @@ const ListItem = props => {
 
 const MealDetailScreen = (props) => {
     const mealId = props.route.params.mealId;
-    
-    const selectedMeal = MEALS.find(meal => meal.id == mealId);
+    const availableMeals = useSelector(state => state.meals.meals);
+    const isFavoriteMeal = useSelector(state => state.meals.favoriteMeals.some(meal => meal.id == mealId));
+    const selectedMeal = availableMeals.find(meal => meal.id == mealId);
+    const dispatch = useDispatch();
+
+    const toggleFavoritesHandler = useCallback(() => {
+        dispatch(toggleFavorite(mealId));
+    }, [dispatch, mealId]);
 
     useLayoutEffect(() => {
         props.navigation.setOptions({
             headerRight: () => (
-                <FavoritesHeaderButton />
+                <FavoritesHeaderButton
+                    isFavoriteMeal={isFavoriteMeal} 
+                    onPress={toggleFavoritesHandler}/>
             ),
             title: selectedMeal.title
         });
-
-    }, [props?.navigation])
+    }, [props?.navigation, isFavoriteMeal])
 
     return (
         <ScrollView>

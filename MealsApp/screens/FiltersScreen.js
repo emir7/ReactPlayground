@@ -1,8 +1,10 @@
-import React, {useLayoutEffect, useState, useEffect, useCallback} from "react";
+import React, {useLayoutEffect, useState} from "react";
 import {View, Text, StyleSheet, Switch} from "react-native";
 import NavHeaderButton from "../components/NavHeaderButton";
 import Colors from "../constants/Colors";
+import {useDispatch} from "react-redux";
 import SaveFilterHeaderWrapper from "../components/SaveFilterHeaderButton";
+import { setFilters } from "../store/actions/meals";
 
 const FilterSwitch = (props) => {
     return (
@@ -12,7 +14,7 @@ const FilterSwitch = (props) => {
                 trackColor={{true: Colors.primaryColor, false: '#ccc'}}
                 thumbColor={Colors.primaryColor}
                 value={props.isGlutenFree} 
-                onValueChange={(newValue) => props.setIsGlutenFree(newValue)} />
+                onValueChange={(newValue) => {console.log("ahaa "+newValue); props.setCorrectBoolHandler(newValue)}} />
         </View>
     );
 };
@@ -23,8 +25,9 @@ const FiltersScreen = (props) => {
     const [isLactoseFree, setIsLactoseFree] = useState(false);
     const [isVegan, setIsVegan] = useState(false);
     const [isVegetarian, setIsVegetarian] = useState(false);
+    const dispatch = useDispatch();
 
-    const saveFilters = useCallback(() => {
+    const onSaveFilterHandler = () => {
         const appliedFilter = {
             isGlutenFree,
             isLactoseFree,
@@ -32,12 +35,8 @@ const FiltersScreen = (props) => {
             isVegetarian
         };
 
-        return appliedFilter;
-    }, [isGlutenFree, isLactoseFree, isVegan, isVegetarian]);
-
-    useEffect(() => {
-        props.navigation.setParams({save: saveFilters})
-    }, [saveFilters, props?.navigation])
+        dispatch(setFilters(appliedFilter));
+    };
 
     useLayoutEffect(() => {
         props.navigation.setOptions({
@@ -49,11 +48,12 @@ const FiltersScreen = (props) => {
                 <SaveFilterHeaderWrapper
                     navigation={props.navigation}
                     route={props.route}
+                    onSaveFilterHandler={onSaveFilterHandler}
                 />
             )
-        });
+    }   );
 
-    }, [props?.navigation, props?.route])
+    }, [props?.navigation, props?.route, isGlutenFree, isLactoseFree, isVegan, isVegetarian])
 
     return (
         <View style={styles.screen}>
@@ -61,22 +61,22 @@ const FiltersScreen = (props) => {
             <FilterSwitch
                 label={"Gluten-free"} 
                 isGlutenFree={isGlutenFree}
-                setIsGlutenFree={setIsGlutenFree}
+                setCorrectBoolHandler={setIsGlutenFree}
             />
             <FilterSwitch
                 label={"Lactose-free"} 
                 isGlutenFree={isLactoseFree}
-                setIsGlutenFree={setIsLactoseFree}
+                setCorrectBoolHandler={setIsLactoseFree}
             />
             <FilterSwitch
                 label={"Vegan"} 
                 isGlutenFree={isVegan}
-                setIsGlutenFree={setIsVegan}
+                setCorrectBoolHandler={setIsVegan}
             />
             <FilterSwitch
                 label={"Vegetarian"} 
                 isGlutenFree={isVegetarian}
-                setIsGlutenFree={setIsVegetarian}
+                setCorrectBoolHandler={setIsVegetarian}
             />
         </View>
     );

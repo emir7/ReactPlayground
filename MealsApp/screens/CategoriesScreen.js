@@ -1,7 +1,7 @@
-import React, {useLayoutEffect} from "react";
-import {FlatList} from "react-native";
+import React, { useLayoutEffect } from "react";
+import { FlatList } from "react-native";
 
-import {CATEGORIES} from "../data/dummy-data";
+import { CATEGORIES } from "../data/dummy-data";
 import CategoryGridTile from "../components/CategoryGridTile";
 import NavHeaderButton from "../components/NavHeaderButton";
 

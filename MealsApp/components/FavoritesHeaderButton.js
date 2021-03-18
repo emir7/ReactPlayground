@@ -19,7 +19,7 @@ const FavoritesHeaderButton = (props) => (
 const FavoritesHeaderButtonWrapper = (props) => {
     return (
         <HeaderButtons HeaderButtonComponent={FavoritesHeaderButton}>
-            <Item title="search" iconName="ios-star" onPress={() => alert('search')}  />
+            <Item title="search" iconName={props.isFavoriteMeal ? "ios-star" : "ios-star-outline"} onPress={() => props.onPress()}  />
         </HeaderButtons>
     );
 }

@@ -23,7 +23,7 @@ const SaveFilterHeaderWrapper = (props) => {
                 title="save" 
                 iconName="ios-save" 
                 onPress={() => {
-                    console.log(props.route.params.save());
+                    props.onSaveFilterHandler();
                 }}  />
         </HeaderButtons>
     );

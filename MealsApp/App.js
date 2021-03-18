@@ -9,6 +9,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { Platform, Text } from "react-native"; 
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createStore, combineReducers } from "redux";
+import { Provider } from "react-redux";
 
 import CategoriesScreen from "./screens/CategoriesScreen";
 import CategoryMealsScreen from "./screens/CategroyMealsScreen";
@@ -17,6 +19,14 @@ import FavoritesScreen from "./screens/FavoritesScreen";
 import FiltersScreen from "./screens/FiltersScreen";
 
 import Colors from "./constants/Colors";
+
+import mealsReducer from "./store/reducers/meals";
+
+const rootReducer = combineReducers({
+  meals: mealsReducer
+});
+
+const store = createStore(rootReducer);
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -101,7 +111,7 @@ const TabNav = () => {
 const MainNavigator = () => {
   return (
       <Drawer.Navigator drawerContentOptions={{activeTintColor: Colors.accentColor, labelStyle: {fontFamily: "open-sans"}}}  >
-        <Drawer.Screen name="Favorites" component={TabNav}/>
+        <Drawer.Screen name="Categories" component={TabNav}/>
         <Drawer.Screen name="Filters" component={FiltersNav} />
       </Drawer.Navigator>
   );
@@ -122,8 +132,11 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <MainNavigator/>
-    </NavigationContainer>
+    <Provider store={store} >
+      <NavigationContainer>
+        <MainNavigator/>
+      </NavigationContainer>
+    </Provider>
+
   );
 }
