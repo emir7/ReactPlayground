@@ -1,33 +1,24 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, Button, TouchableNativeFeedback } from "react-native";
-
-import Colors from "../../constants/Colors";
+import { View, Text, Image, StyleSheet, TouchableNativeFeedback } from "react-native";
 
 const ProductItem = (props) => {
     return (
-            <View style={styles.product}>
-                <TouchableNativeFeedback onPress={props.onViewDetail} useForeground  >
-                    <View>
-                        <Image
-                            style={styles.image}
-                            source={{uri: props.imageUrl}} />
-                        <View style={styles.details}>
-                            <Text style={styles.title}>{props.title}</Text>
-                            <Text style={styles.price}>${props.price.toFixed(2)}</Text>
-                        </View>
-                        <View style={styles.buttonsContainer}>
-                            <Button
-                                color={Colors.primary} 
-                                title="View Details"
-                                onPress={props.onViewDetail} />
-                            <Button 
-                                color={Colors.primary} 
-                                title="To Cart"
-                                onPress={props.onAddToCart} />
-                        </View>
+        <View style={styles.product}>
+            <TouchableNativeFeedback onPress={props.onSelect} useForeground  >
+                <View>
+                    <Image
+                        style={styles.image}
+                        source={{uri: props.imageUrl}} />
+                    <View style={styles.details}>
+                        <Text style={styles.title}>{props.title}</Text>
+                        <Text style={styles.price}>${0}</Text>
                     </View>
-                </TouchableNativeFeedback>
-            </View>
+                    <View style={styles.buttonsContainer}>
+                      {props.children}
+                    </View>
+                </View>
+            </TouchableNativeFeedback>
+        </View>
     );
 };
 
